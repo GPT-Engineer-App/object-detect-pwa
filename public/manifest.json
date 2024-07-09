@@ -1,10 +1,6 @@
 {
-  "name": "Object Detection & Counting PWA",
-  "short_name": "ObjectCount",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#4a90e2",
+  "name": "Object Detection PWA",
+  "short_name": "ObjDetect",
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -16,5 +12,10 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
 }

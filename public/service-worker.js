@@ -13,7 +13,12 @@ const urlsToCache = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
+      .then((cache) => {
+        return cache.addAll(urlsToCache.map(url => new Request(url, { mode: 'no-cors' })))
+          .catch((error) => {
+            console.error('Failed to cache:', error);
+          });
+      })
   );
 });
 
@@ -24,7 +29,9 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
-        return fetch(event.request);
+        return fetch(event.request).catch((error) => {
+          console.error('Fetch failed:', error);
+        });
       })
   );
 });

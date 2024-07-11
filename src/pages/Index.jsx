@@ -1,8 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const Index = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -15,6 +30,18 @@ const Index = () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const requestNotificationPermission = async () => {
@@ -42,6 +69,7 @@ const Index = () => {
       <p className="text-sm text-gray-600">
         This app works offline and can be installed on your device for quick access.
       </p>
+      {user && <p className="text-sm text-gray-600">Logged in as: {user.email}</p>}
     </div>
   );
 };

@@ -21,3 +21,16 @@ if ('serviceWorker' in navigator) {
       });
   });
 }
+
+// Set COOP and COEP headers
+if (typeof window !== 'undefined') {
+  const metaCOOP = document.createElement('meta');
+  metaCOOP.httpEquiv = 'Cross-Origin-Opener-Policy';
+  metaCOOP.content = 'same-origin';
+  document.head.appendChild(metaCOOP);
+
+  const metaCOEP = document.createElement('meta');
+  metaCOEP.httpEquiv = 'Cross-Origin-Embedder-Policy';
+  metaCOEP.content = 'require-corp';
+  document.head.appendChild(metaCOEP);
+}

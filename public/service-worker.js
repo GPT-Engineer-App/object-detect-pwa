@@ -14,9 +14,10 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        return cache.addAll(urlsToCache.map(url => new Request(url, { mode: 'no-cors' })))
+        return cache.addAll(urlsToCache)
           .catch((error) => {
             console.error('Failed to cache:', error);
+            logCORSIssues(urlsToCache);
           });
       })
   );
@@ -62,3 +63,17 @@ self.addEventListener('push', (event) => {
     self.registration.showNotification('Object Detection & Counting', options)
   );
 });
+
+function logCORSIssues(urls) {
+  urls.forEach(url => {
+    fetch(url, { mode: 'cors' })
+      .then(response => {
+        if (!response.ok) {
+          console.error(`CORS issue with URL: ${url}`);
+        }
+      })
+      .catch(error => {
+        console.error(`CORS issue with URL: ${url}`, error);
+      });
+  });
+}
